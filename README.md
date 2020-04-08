@@ -6,7 +6,7 @@ solving sudoku puzzle with backtracking
 	example:
 		./sudoku maps/easy
 	or
-		./sudoku -s10000 maps/easy
+		./sudoku -s100000 maps/easy
 
 
 2 ==>> example file sudoku
