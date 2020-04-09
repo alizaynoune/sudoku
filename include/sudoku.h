@@ -16,6 +16,7 @@
 #define BLUE	("\e[1;96m")
 #define MAGENTA	("\e[1;95m")
 #define SFLG	("-s")
+#define STP	("-S")
 /* structur
  */
 typedef struct		s_lines
@@ -31,8 +32,8 @@ typedef struct		s_data
 	int		fd;
 	int		**tab;
 	int		**cp;
-	int		flag;
-	long		slp;
+	int		slp;
+	int		stop;
 }			t_data;
 
 void		error_malloc(t_data *d, char *l);

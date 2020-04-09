@@ -161,7 +161,6 @@ void	ft_modef(int **tab, int **cp, int slp)
 	}
 	else
 		ft_printf("%s          WOW   (^_^)    WOW%s\n", GREEN, DEF);
-	ft_print(tab, cp, i, j);
 }
 
 
@@ -181,5 +180,4 @@ void	ft_solution(t_data *d)
 		l = l->next;
 	}
 	ft_modef(d->tab, d->cp, d->slp);
-	d->l = NULL;
 }

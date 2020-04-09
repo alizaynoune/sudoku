@@ -145,13 +145,17 @@ int		flag_sleep(char *f, t_data *d)
 {
 	int	sng;
 
-	if (strlen(f) > 2)
+	if (strlen(f) >= 2)
 	{
 		sng = f[2] == '+' || f[2] == '-' ? 1 : 0;
 		if (!ft_strncmp(f, SFLG, 2) && ft_all_digit(&f[2 + sng]))
 		{
-			d->flag = 1;
 			d->slp = ft_atoi(&f[2 + sng]);
+			return (1);
+		}
+		else if (!ft_strncmp(f, STP, 2) && ft_all_digit(&f[2 + sng]))
+		{
+			d->stop = ft_atoi(&f[2 + sng]);
 			return (1);
 		}
 	}
@@ -161,17 +165,28 @@ int		flag_sleep(char *f, t_data *d)
 int		main(int ac, char **av)
 {
 	t_data		d;
+	int		i;
 
 	ft_bzero(&d, sizeof(t_data));
-	if (ac == 2 || (ac == 3 && flag_sleep(av[1], &d)))
+	if (ac >= 2)
 	{
-		d.fd = check_filee(av[ac - 1]);
-		read_file(&d);
-		check_syntax(&d);
-		ft_solution(&d);
-		//ft_print(d.tab, d.cp);
-		ft_free_tables(d.tab, d.cp);
-		ft_free_lines(d.l);
+		i = flag_sleep(av[1], &d) ? 2 : 1;
+		ac > 2 && flag_sleep(av[2], &d) && i == 2 ? i = 3 : 0;
+		while (i < ac)
+		{
+			d.fd = check_filee(av[i]);
+			read_file(&d);
+			check_syntax(&d);
+			ft_solution(&d);
+			ft_print(d.tab, d.cp, -1, -1);
+			ft_free_tables(d.tab, d.cp);
+			d.tab = NULL;
+			d.cp = NULL;
+			ft_free_lines(d.l);
+			d.l = NULL;
+			i++;
+			i < ac ? sleep(d.stop) : 0;
+		}
 	}
 	else
 	{
