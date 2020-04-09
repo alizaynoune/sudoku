@@ -16,7 +16,6 @@ example:
 	or
 		./sudoku -S2 maps/easy maps/su
 
-
 2 ==>> example file sudoku
 	2 1 0 3 9 0 4 0 5
 	0 9 0 0 0 7 0 0 2
