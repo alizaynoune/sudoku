@@ -1,12 +1,20 @@
 # sudoku
 solving sudoku puzzle with backtracking
 
-1 ==>> 	make
-	./sudoku [file sudoku] or ./sudoku -s[tim slow millisecond] [file sudoku]
-	example:
+0 ==>> run make
+
+
+1 ==>> 	./sudoku [file sudoku] or ./sudoku [flag1] or/and [flag2] [file sudoku]
+
+	==> flags: -s[time milliseconds] ==> slow solving
+		 : -S[time seconds] ==> time between each result "work whit many files"
+	
+example:
 		./sudoku maps/easy
 	or
 		./sudoku -s100000 maps/easy
+	or
+		./sudoku -S2 maps/easy maps/su
 
 
 2 ==>> example file sudoku
