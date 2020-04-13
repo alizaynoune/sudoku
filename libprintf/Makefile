@@ -108,35 +108,42 @@ OBJ = $(addprefix $(OBJ_P), $(SRC_FILES1:.c=.o))
 OBJ := $(OBJ) $(addprefix $(OBJ_P), $(SRC_FILES2:.c=.o))
 OBJ := $(OBJ) $(addprefix $(OBJ_P), $(SRC_FILES3:.c=.o))
 
+RED = \e[1;31m
+MOVE = \e[1;34m
+BLUE = \e[1;96m
+GREEN = \e[1;32m
+DEF = \e[0m
+GREY = \e[1;90m
+
 all: $(NAME)
 
 $(NAME): $(OBJ)
 	@ar rc $(NAME) $(OBJ)
 	@ranlib $(NAME)
-	@echo "\x1B[96mLibrary File \x1B[90;0m[\x1B[34;1m $(notdir $(NAME)) \x1B[90;0m] \x1B[32mCreated.\x1B[39;0m"
+	@echo "$(GREY)[$(MOVE) Library File$(BLUE) $(notdir $(NAME)) $(GREY)] $(GREEN)Created.$(DEF)"
 
 $(OBJ_P)%.o: $(SRC1_P)%.c $(INCLDF)
 	@mkdir -p $(OBJ_P)
 	@gcc -c $(FLAGS) $< -o $@ -I $(INC_DIR)
-	@echo "\x1B[96mObject File \x1B[90;0m[\x1B[34;1m $(notdir $@) \x1B[90;0m] \x1B[32mCreated.\x1B[39;0m"
+	@echo "$(GREY)[ $(MOVE)Object File$(BLUE) $(notdir $@) $(GREY)] $(GREEN)Created.$(DEF)"
 
 $(OBJ_P)%.o: $(SRC2_P)%.c $(INCLDL)
 	@mkdir -p $(OBJ_P)
 	@gcc -c $(FLAGS) $< -o $@ -I $(INC_DIR)
-	@echo "\x1B[96mObject File \x1B[90;0m[\x1B[34;1m $(notdir $@) \x1B[90;0m] \x1B[32mCreated.\x1B[39;0m"
+	@echo "$(GREY)[ $(MOVE)Object File$(BLUE) $(notdir $@) $(GREY)] $(GREEN)Created.$(DEF)"
 
 $(OBJ_P)%.o: $(SRC3_P)%.c $(INCLDN)
 	@mkdir -p $(OBJ_P)
 	@gcc -c $(FLAGS) $< -o $@ -I $(INC_DIR)
-	@echo "\x1B[96mObject File \x1B[90;0m[\x1B[34;1m $(notdir $@) \x1B[90;0m] \x1B[32mCreated.\x1B[39;0m"
+	@echo "$(GREY)[ $(MOVE)Object File$(BLUE) $(notdir $@) $(GREY)] $(GREEN)Created.$(DEF)"
 
 clean:
-	@rm -rf $(OBJ_P)
-	@echo "\x1B[96mObjects path \x1B[90;0m[\x1B[34;1m $(OBJ_P) \x1B[90;0m] \x1B[31mDeleted.\x1B[39;0m"
+	@/bin/rm -rf $(OBJ_P)
+	@echo "$(GREY)[ $(MOVE)Objects path$(BLUE) $(OBJ_P) $(GREY)] $(RED)Deleted.$(DEF)"
 
 fclean: clean
 	@/bin/rm -f $(NAME)
-	@echo "\x1B[96mLibrary File \x1B[90;0m[\x1B[34;1m $(notdir $(NAME)) \x1B[90;0m] \x1B[31mDeleted.\x1B[39;0m"
+	@echo "$(GREY)[ $(MOVE)Library File$(BLUE) $(notdir $(NAME)) $(GREY)] $(RED)Deleted.$(DEF)"
 
 re: fclean all
 
