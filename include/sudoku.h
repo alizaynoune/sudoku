@@ -3,7 +3,9 @@
 /* includes
  */
 #include <errno.h>
-#include "../libprintf/includes/ft_printf.h"
+#include "ft_dprintf.h"
+#include "get_next_line.h"
+#include "libft.h"
 #include <fcntl.h>
 #include <stdio.h>
 
@@ -26,7 +28,7 @@ typedef struct		s_lines
 }			t_lines;
 
 
-typedef struct		s_data
+typedef struct		s_all
 {
 	t_lines		*l;
 	int		fd;
@@ -34,11 +36,11 @@ typedef struct		s_data
 	int		**cp;
 	int		slp;
 	int		stop;
-}			t_data;
+}			t_all;
 
-void		error_malloc(t_data *d, char *l);
+void		error_malloc(t_all *d, char *l);
 void		ft_free_lines(t_lines *l);
-void		ft_solution(t_data *d);
+void		ft_solution(t_all *d);
 void		ft_print(int **tab, int **cp, int a, int b);
 void		ft_free_tables(int **t, int **c);
 

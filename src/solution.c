@@ -1,16 +1,21 @@
 #include "sudoku.h"
 
-void	ft_convert_line(char *l, int **s1, int **s2)
+int     ft_convert_line(char *l, int **s1, int **s2)
 {
 	int	i;
 	int	j;
 	int	*line[2];
 
-	line[0] = (int *)malloc(sizeof(int) * 8);
-	line[1] = (int *)malloc(sizeof(int) * 8);
+	if (!(line[0] = (int *)ft_memalloc(sizeof(int) * 9)))
+        return (0);
+	if (!(line[1] = (int *)ft_memalloc(sizeof(int) * 9)))
+    {
+        ft_memdel((void *)&line[0]);
+        return (0);
+    }
 	i = 0;
 	j = 0;
-	while (l[i])
+	while (l && l[i])
 	{
 		if (i % 2 == 0)
 		{
@@ -22,6 +27,7 @@ void	ft_convert_line(char *l, int **s1, int **s2)
 	}
 	*s1 = line[0];
 	*s2 = line[1];
+    return (1);
 }
 
 int	check_i(int **tab, int j, int nb)
@@ -29,7 +35,7 @@ int	check_i(int **tab, int j, int nb)
 	int	i;
 
 	i = 0;
-	while (i < 9)
+	while (*tab && tab && i < 9)
 	{
 		if (tab[i][j] == nb)
 			return (0);
@@ -43,7 +49,7 @@ int	check_j(int **tab, int i, int nb)
 	int	j;
 
 	j = 0;
-	while (j < 9)
+	while (*tab && tab && j < 9)
 	{
 		if (tab[i][j] == nb)
 			return (0);
@@ -156,28 +162,32 @@ void	ft_modef(int **tab, int **cp, int slp)
 	system("clear");
 	if (i < 0)
 	{
-		ft_printf("Error no solution\n");
-		ft_printf("%s         (-_-)%s\n", RED, DEF);
+		ft_dprintf(2, "Error no solution\n");
+		ft_dprintf(2, "%s         (-_-)%s\n", RED, DEF);
 	}
 	else
 		ft_printf("%s          WOW   (^_^)    WOW%s\n", GREEN, DEF);
 }
 
 
-void	ft_solution(t_data *d)
+void	ft_solution(t_all *d)
 {
 	int	i;
 	t_lines	*l;
 
 	i = 0;
 	l = d->l;
-	d->tab = (int **)malloc(sizeof(int *) * 8);
-	d->cp = (int **)malloc(sizeof(int *) * 8);
+	if (!(d->tab = (int **)ft_memalloc(sizeof(int *) * 9)))
+        error_malloc(d, NULL);
+	if (!(d->cp = (int **)ft_memalloc(sizeof(int *) * 9)))
+        error_malloc(d, NULL);
 	while (l)
 	{
-		ft_convert_line(l->line, &d->tab[i], &d->cp[i]);
+		if (!(ft_convert_line(l->line, &d->tab[i], &d->cp[i])))
+            error_malloc(d, NULL);
 		i++;
 		l = l->next;
 	}
-	ft_modef(d->tab, d->cp, d->slp);
+    if (d->tab && d->cp)
+        ft_modef(d->tab, d->cp, d->slp);
 }

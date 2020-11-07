@@ -4,13 +4,12 @@ void		ft_free_lines(t_lines *l)
 {
 	t_lines		*tmp;
 
-	tmp = l;
-	while (tmp)
+	while (l)
 	{
-		l = tmp;
-		tmp = tmp->next;
-		free(l->line);
-		free(l);
+		tmp = l;
+		l = l->next;
+		(tmp->line) ? ft_memdel((void *)&tmp->line) : 0;
+		ft_memdel((void *)&tmp);
 	}
 }
 
@@ -19,12 +18,12 @@ void	ft_free_tables(int **t, int **c)
 	int	i;
 
 	i = 0;
-	while (i < 9)
+	while (t && i < 9)
 	{
-		free(t[i]);
-		free(c[i]);
+		(t[i]) ? ft_memdel((void *)&t[i]) : 0;
 		i++;
 	}
-	free(t);
-	free(c);
+	(t) ? ft_memdel((void *)&t) : 0;
+    if (c)
+        ft_free_tables(c, NULL);
 }

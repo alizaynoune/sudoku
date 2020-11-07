@@ -7,19 +7,19 @@ int		check_filee(char *f)
 
 	if ((fd = open(f, O_RDONLY)) < 0)
 	{
-		ft_printf("%s\n", strerror(errno));
+		ft_dprintf(2, "%s\n", strerror(errno));
 		exit(1);
 	}
 	err = read(fd, &c, 1);
 	if (!err)
 	{
-		ft_printf("%s is empty\n", f);
+		ft_dprintf(2, "%s is empty\n", f);
 		close(fd);
 		exit(0);
 	}
 	if (err < 0)
 	{
-		ft_printf("%s\n", strerror(errno));
+		ft_dprintf(2, "%s\n", strerror(errno));
 		close(fd);
 		exit(1);
 	}
@@ -33,9 +33,8 @@ t_lines		*ft_link_list(char *line, t_lines *l)
 	t_lines		*new;
 
 	tmp = l;
-	if (!(new = (t_lines *)malloc(sizeof(t_lines))))
+	if (!(new = (t_lines *)ft_memalloc(sizeof(t_lines))))
 		return(NULL);
-	ft_bzero(new, sizeof(t_lines));
 	new->line = line;
 	if (!l)
 		return (new);
@@ -45,7 +44,7 @@ t_lines		*ft_link_list(char *line, t_lines *l)
 	return (l);
 }
 
-void		read_file(t_data *d)
+void		read_file(t_all *d)
 {
 	char	*l;
 	int	nb;
@@ -54,11 +53,11 @@ void		read_file(t_data *d)
 	while (get_next_line(d->fd, &l) > 0)
 	{
 		nb++;
-		if (count_words(l, ' ') != 9)
+		if (count_words(l, " ") != 9)
 		{
 			ft_strdel(&l);
 			close(d->fd);
-			ft_printf("Error lenght line %d\n", nb);
+			ft_dprintf(2, "Error lenght line %d\n", nb);
 			ft_free_lines(d->l);
 			exit(1);
 		}
@@ -72,13 +71,13 @@ void		read_file(t_data *d)
 	{
 		close(d->fd);
 		ft_free_lines(d->l);
-		ft_printf("Error nuber of lines\n");
+		ft_dprintf(2, "Error nuber of lines\n");
 		exit(1);
 	}
 	close(d->fd);
 }
 
-void		check_syntax(t_data *d)
+void		check_syntax(t_all *d)
 {
 	t_lines		*l;
 	int		i;
@@ -89,10 +88,11 @@ void		check_syntax(t_data *d)
 		i = 0;
 		while (l->line[i])
 		{
-			if ((!ft_isdigit(l->line[i]) && l->line[i] != ' ') || (ft_isdigit(l->line[i]) && ft_isdigit(l->line[i + 1])))
+			if ((!ft_isdigit(l->line[i]) && l->line[i] != ' ') ||
+                    (ft_isdigit(l->line[i]) && ft_isdigit(l->line[i + 1])))
 			{
 				ft_free_lines(d->l);
-				ft_printf("Error syntax file\n");
+				ft_dprintf(2, "Error syntax file\n");
 				exit(1);
 			}
 			i++;
@@ -141,7 +141,7 @@ void		ft_print(int **tab, int **cp, int a, int b)
 	}
 }
 
-int		flag_sleep(char *f, t_data *d)
+int		flag_sleep(char *f, t_all *d)
 {
 	int	sng;
 
@@ -164,28 +164,32 @@ int		flag_sleep(char *f, t_data *d)
 
 int		main(int ac, char **av)
 {
-	t_data		d;
+	t_all		*d;
 	int		i;
 
-	ft_bzero(&d, sizeof(t_data));
+    if (!(d = (t_all *)ft_memalloc(sizeof(t_all))))
+    {
+        ft_dprintf(2, "%s\n", strerror(errno));
+        return (-1);
+    }
 	if (ac >= 2)
 	{
-		i = flag_sleep(av[1], &d) ? 2 : 1;
-		ac > 2 && flag_sleep(av[2], &d) && i == 2 ? i = 3 : 0;
+		i = flag_sleep(av[1], d) ? 2 : 1;
+		ac > 2 && flag_sleep(av[2], d) && i == 2 ? i = 3 : 0;
 		while (i < ac)
 		{
-			d.fd = check_filee(av[i]);
-			read_file(&d);
-			check_syntax(&d);
-			ft_solution(&d);
-			ft_print(d.tab, d.cp, -1, -1);
-			ft_free_tables(d.tab, d.cp);
-			d.tab = NULL;
-			d.cp = NULL;
-			ft_free_lines(d.l);
-			d.l = NULL;
+			d->fd = check_filee(av[i]);
+			read_file(d);
+			check_syntax(d);
+			ft_solution(d);
+			ft_print(d->tab, d->cp, -1, -1);
+			ft_free_tables(d->tab, d->cp);
+			d->tab = NULL;
+			d->cp = NULL;
+			ft_free_lines(d->l);
+			d->l = NULL;
 			i++;
-			i < ac ? sleep(d.stop) : 0;
+			i < ac ? sleep(d->stop) : 0;
 		}
 	}
 	else
@@ -193,5 +197,6 @@ int		main(int ac, char **av)
 		ft_printf("usage : ./sudoku [file sudoku]\n");
 		ft_printf("	 -s[time sleep milliseconde]\n");
 	}
+    ft_memdel((void *)&d);
 	return (0);
 }
