@@ -1,5 +1,3 @@
-    [![Download](https://poser.pugx.org/ali-irawan/xtra/d/total.svg)](https://poser.pugx.org/ali-irawan/xtra/d/total.svg)
-    sudoku
     solving sudoku puzzle with backtracking
     
     0 ==>> run make
